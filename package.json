@@ -1,12 +1,16 @@
 {
   "name": "tag-cloud",
   "version": "0.0.0",
+  "homepage": "https://jonasholbech.github.io/electives-autumn-21-tag-cloud/",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "build": "vite build --base=./",
+    "serve": "vite preview",
+    "deploy": "gh-pages -d dist",
+    "predeploy": "npm run build"
   },
   "devDependencies": {
+    "gh-pages": "^3.2.3",
     "vite": "^2.6.4"
   },
   "dependencies": {

@@ -1,14 +1,15 @@
 import "./style.css";
 import shuffle from "just-shuffle";
 
-const dataURL = "keywords.csv";
+const dataURL = window.navigator.onLine
+  ? "https://docs.google.com/spreadsheets/d/e/2PACX-1vTfUZWbzQwzCqK1pW-uXHLckN-oh0SrL2OM3_G6eFeIN_EW1RJtx76kI5FIeErwg126nWVYoXYBN08m/pub?output=csv"
+  : "keywords.csv";
 
 const maxFontSizeForTag = 6;
 
 function handleResult(fragment, result, highestValue) {
   const rating = result.weight;
   const name = result.kw;
-  const link = "#";
   let fontSize = (rating / highestValue) * maxFontSizeForTag;
   fontSize = +fontSize.toFixed(2);
   if (fontSize <= 1) {
@@ -17,18 +18,18 @@ function handleResult(fragment, result, highestValue) {
   const fontSizeProperty = `${fontSize}em`;
   const tag = document.createElement("li");
   tag.classList.add("tag");
-  tag.innerHTML = `<a class="tag__link" href="${link}" style="--font-size: ${fontSizeProperty}">${name}</a>`;
+  tag.innerHTML = `<span class="tag__link" style="--font-size: ${fontSizeProperty}">${name}</span>`;
   fragment.appendChild(tag);
 }
 
-function showElective(data) {
+function showElective(data, title, language) {
   const template = document.querySelector("template").content;
   const copy = template.cloneNode(true);
-  copy.querySelector("h2").textContent = data[0].elective;
+  copy.querySelector("h2").textContent = `${title} - ${language}`;
   const fragment = document.createDocumentFragment();
   data.forEach((result) => handleResult(fragment, result, 10));
   copy.querySelector(".tags").appendChild(fragment);
-  document.body.appendChild(copy);
+  document.querySelector(".clouds").appendChild(copy);
 }
 fetch(dataURL)
   .then(function (res) {
@@ -49,7 +50,7 @@ fetch(dataURL)
     const fe = keywords.filter((kw) => kw.elective === "FE");
     const dd = keywords.filter((kw) => kw.elective === "DD");
     const dbcm = keywords.filter((kw) => kw.elective === "DBCM");
-    showElective(shuffle(dbcm));
-    showElective(shuffle(dd));
-    showElective(shuffle(fe));
+    showElective(shuffle(dbcm), "DBCM", "English");
+    showElective(shuffle(dd), "Digitalt Design", "Danish");
+    showElective(shuffle(fe), "Front End Development", "English");
   });

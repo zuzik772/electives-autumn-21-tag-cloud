@@ -18,6 +18,9 @@ body {
 h2 {
   margin-left: 1rem;
 }
+#buffer {
+  min-height: 400px;
+}
 .tags {
   display: flex;
   flex-wrap: wrap;
